@@ -56,21 +56,7 @@ Additional functionality can be installed using the following guidelines:
                     'method' => 'action_function', // required
                     'csrf_exempt' => true
                 ]
-        ];
-
-        // defines an extension's methods and hooks that should be installed
-        public $methods = [
-            [
-                'method' => 'run', // will default to same as hook if not defined
-                'hook' => 'template_fetch_template' // required
-                'priority' => ""
-                'enabled' => "" // y/n
-            ],
-            [
-                'method' => 'cleanup', // will default to same as hook if not defined
-                'hook' => 'template_post_parse' // required
-            ]
-        ];    
+        ];   
 
 
         /**
@@ -113,9 +99,9 @@ Extension files can now be as simplified as well. However they must include the 
         public $methods = [
             [
                 'method' => 'run', // will default to same as hook if not defined
-                'hook' => 'template_fetch_template' // required
-                'priority' => ""
-                'enabled' => "" // y/n
+                'hook' => 'template_fetch_template', // required
+                'priority' => "",
+                'enabled' => "", // y/n
             ],
             [
                 'method' => 'cleanup', // will default to same as hook if not defined
