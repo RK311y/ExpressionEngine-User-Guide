@@ -381,6 +381,7 @@ Within this loop, you have the following single variables:
     {field_name}
     {field_label}
     {field_id}
+    {field_type}
     {error}
     {field_instructions}
     {formatting_buttons} - Shows the EE formatting buttons if have that option selected for that field
