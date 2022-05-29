@@ -18,36 +18,36 @@ const CONFIG = require('./scripts/config.js')
 // -------------------------------------------------------------------
 
 function clean() {
-	return del([CONFIG.outputDir + '/**/*'])
+    return del([CONFIG.outputDir + '/**/*'])
 }
 
 // Copies the themes assets to the build folder
 function copyThemeAssets() {
-	return gulp.src(CONFIG.assetsDir + '/**/*')
-	.pipe(gulp.dest(CONFIG.outputDir + '/_assets'))
+    return gulp.src(CONFIG.assetsDir + '/**/*')
+    .pipe(gulp.dest(CONFIG.outputDir + '/_assets'))
 }
 
 // Copies all other files that are not Markdown
 function copyOtherFiles() {
-	let filesToMove = [
-		path.resolve( CONFIG.sourceDir, '**/**'),
-		'!' + path.resolve(CONFIG.sourceDir, '**/*.md'),
-		'!' + CONFIG.tocPath
-	]
+    let filesToMove = [
+        path.resolve( CONFIG.sourceDir, '**/**'),
+        '!' + path.resolve(CONFIG.sourceDir, '**/*.md'),
+        '!' + CONFIG.tocPath
+    ]
 
-	return gulp.src(filesToMove, { base: CONFIG.sourceDir })
-	.pipe(gulp.dest(CONFIG.outputDir))
+    return gulp.src(filesToMove, { base: CONFIG.sourceDir })
+    .pipe(gulp.dest(CONFIG.outputDir))
 }
 
 // -------------------------------------------------------------------
 
-const build	= require('./scripts/build.js')
+const build = require('./scripts/build.js')
 const buildAll = gulp.series(copyOtherFiles, copyThemeAssets, build)
 
 exports.build = gulp.series(clean, buildAll)
 
 exports.watch = () => {
-	gulp.watch([CONFIG.sourceDir + '/**/*', CONFIG.assetsDir + '/**/*', CONFIG.pageTemplatePath], buildAll)
+    gulp.watch([CONFIG.sourceDir + '/**/*', CONFIG.assetsDir + '/**/*', CONFIG.pageTemplatePath], buildAll)
 }
 
 // -------------------------------------------------------------------
@@ -61,36 +61,36 @@ const cleanCSS = require('gulp-clean-css')
 const babel    = require('gulp-babel')
 
 function cleanThemeAssets() {
-	return del([CONFIG.assetsDir + '/**/*'])
+    return del([CONFIG.assetsDir + '/**/*'])
 }
 
 function buildLess() {
-	return gulp.src(CONFIG.assetsSourceDir + '/styles/default.less')
-	.pipe(less())
-	.pipe(cleanCSS({ level: 1 }))
-	.pipe(rename({ suffix: '.min' }))
-	.pipe(gulp.dest(CONFIG.assetsDir))
+    return gulp.src(CONFIG.assetsSourceDir + '/styles/default.less')
+    .pipe(less())
+    .pipe(cleanCSS({ level: 1 }))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest(CONFIG.assetsDir))
 }
 
 function buildJs() {
-	return gulp.src([CONFIG.assetsSourceDir + '/js/main.js'])
-		.pipe(babel({
-			presets: [
-				[ "@babel/preset-env", { "targets": "> 0.25%, not dead"} ]
-			]
-		}))
-		.pipe(minify({ ext: { min: '.min.js' }, noSource: true, preserveComments: 'some'}))
-		.pipe(gulp.dest(CONFIG.assetsDir))
+    return gulp.src([CONFIG.assetsSourceDir + '/js/main.js'])
+        .pipe(babel({
+            presets: [
+                [ "@babel/preset-env", { "targets": "> 0.25%, not dead"} ]
+            ]
+        }))
+        .pipe(minify({ ext: { min: '.min.js' }, noSource: true, preserveComments: 'some'}))
+        .pipe(gulp.dest(CONFIG.assetsDir))
 }
 
 function moveThemeFonts() {
-	return gulp.src(CONFIG.assetsSourceDir + '/webfonts/**/*')
-	.pipe(gulp.dest(CONFIG.assetsDir +  '/webfonts'))
+    return gulp.src(CONFIG.assetsSourceDir + '/webfonts/**/*')
+    .pipe(gulp.dest(CONFIG.assetsDir +  '/webfonts'))
 }
 
 function moveThemeImages() {
-	return gulp.src(CONFIG.assetsSourceDir + '/images/**/*')
-	.pipe(gulp.dest(CONFIG.assetsDir +  '/images'))
+    return gulp.src(CONFIG.assetsSourceDir + '/images/**/*')
+    .pipe(gulp.dest(CONFIG.assetsDir +  '/images'))
 }
 
 const buildAssets = gulp.series(cleanThemeAssets, buildLess, buildJs, moveThemeImages, moveThemeFonts)
