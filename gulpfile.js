@@ -97,3 +97,5 @@ const buildAssets = gulp.series(cleanThemeAssets, buildLess, buildJs, moveThemeI
 
 exports.buildAssets = buildAssets
 exports.watchAssets = () => gulp.watch([CONFIG.assetsSourceDir + '/styles/**/*', CONFIG.assetsSourceDir + '/js/**/*', CONFIG.assetsSourceDir + '/images/**/**', CONFIG.assetsSourceDir + '/webfonts/**/**'], buildAssets)
+
+// END
