@@ -9,11 +9,17 @@
 
 require('colors')
 
-const path = require('path')
-const gulp = require('gulp')
-const del  = require('del')
+const path      = require('path')
+const gulp      = require('gulp')
+const del       = require('del')
+const less      = require('gulp-less')
+const rename    = require("gulp-rename")
+const minify    = require('gulp-minify')
+const cleanCSS  = require('gulp-clean-css')
+const babel     = require('gulp-babel')
 
-const CONFIG = require('./scripts/config.js')
+const build     = require('./scripts/build.js')
+const CONFIG    = require('./scripts/config.js')
 
 // -------------------------------------------------------------------
 
@@ -40,25 +46,8 @@ function copyOtherFiles() {
 }
 
 // -------------------------------------------------------------------
-
-const build = require('./scripts/build.js')
-const buildAll = gulp.series(copyOtherFiles, copyThemeAssets, build)
-
-exports.build = gulp.series(clean, buildAll)
-
-exports.watch = () => {
-    gulp.watch([CONFIG.sourceDir + '/**/*', CONFIG.assetsDir + '/**/*', CONFIG.pageTemplatePath], buildAll)
-}
-
-// -------------------------------------------------------------------
 // Theme Assets
 // -------------------------------------------------------------------
-
-const less     = require('gulp-less')
-const rename   = require("gulp-rename")
-const minify   = require('gulp-minify')
-const cleanCSS = require('gulp-clean-css')
-const babel    = require('gulp-babel')
 
 function cleanThemeAssets() {
     return del([CONFIG.assetsDir + '/**/*'])
@@ -91,6 +80,16 @@ function moveThemeFonts() {
 function moveThemeImages() {
     return gulp.src(CONFIG.assetsSourceDir + '/images/**/*')
     .pipe(gulp.dest(CONFIG.assetsDir +  '/images'))
+}
+
+// -------------------------------------------------------------------
+
+const buildAll = gulp.series(copyOtherFiles, copyThemeAssets, build)
+
+exports.build = gulp.series(clean, buildAll)
+
+exports.watch = () => {
+    gulp.watch([CONFIG.sourceDir + '/**/*', CONFIG.assetsDir + '/**/*', CONFIG.pageTemplatePath], buildAll)
 }
 
 const buildAssets = gulp.series(cleanThemeAssets, buildLess, buildJs, moveThemeImages, moveThemeFonts)
